@@ -3,6 +3,7 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <script>
@@ -15,10 +16,26 @@
         while(index >= 0){
           var tweet = streams.home[index];
           var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
+          $tweet.text('@' + tweet.user + ': ' + tweet.message + ' : ' + tweet.created_at);
           $tweet.appendTo($body);
           index -= 1;
         }
+        
+        var indexUpdate = streams.home.length;
+        function getUpdates() {
+          var numNewTweets = streams.home.length - indexUpdate;
+          if (numNewTweets > 0) {
+            for (var i = 0; i < numTweets; i++) {
+              tweet = streams.home[indexUpdate + i]
+              $tweet = $('<div></div>');
+              $tweet.text('@' + tweet.user + ': ' + tweet.message + ' : ' + tweet.created_at);
+              $tweet.appendTo($body);
+              indexUpdate = indexUpdage + numNewTweets;
+            }
+          }
+        }
+
+        setInterval(function(){getUpdates()}, 1000)
 
       });
 
