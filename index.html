@@ -6,17 +6,27 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <h1>Twittler</h1>
+    <h5>Click on tweet to see full timeline of tweets from that user.</h5>
+    <h5>Click again to update.</h5>
+    <div class="tweetContainer">
+      
+    </div>
+    <div class="selectContainer">
+
+    </div>
     <script>
 
       $(document).ready(function(){
-        var $body = $('body');
+        var $body = $(".tweetContainer");
+        var $selectBody = $(".selectContainer")
         $body.html('');
 
         var index = streams.home.length - 1;
         while(index >= 0){
           var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message + ' : ' + tweet.created_at);
+          var $tweet = $(`<div class="${tweet.user} tweet" id="twitt"></div>`);
+          $tweet.text('@' + tweet.user + ': ' + tweet.message + " -------- " + tweet.created_at);
           $tweet.appendTo($body);
           index -= 1;
         }
@@ -25,19 +35,64 @@
         function getUpdates() {
           var numNewTweets = streams.home.length - indexUpdate;
           if (numNewTweets > 0) {
-            for (var i = 0; i < numTweets; i++) {
-              tweet = streams.home[indexUpdate + i]
-              $tweet = $('<div></div>');
+            for (var i = 0; i < numNewTweets; i++) {
+              tweet = streams.home[indexUpdate + i - 1]
+              $tweet = $(`<div class="${tweet.user} tweet" id="twitt"></div>`);
               $tweet.text('@' + tweet.user + ': ' + tweet.message + ' : ' + tweet.created_at);
               $tweet.appendTo($body);
-              indexUpdate = indexUpdage + numNewTweets;
+              indexUpdate = indexUpdate + numNewTweets;
+              console.log(streams.home)
             }
           }
         }
 
-        setInterval(function(){getUpdates()}, 1000)
+        
+
+        $(".tweetContainer").on("click", ".tweet", function(event) {
+          event.preventDefault();
+          var x = $(this).attr("class");
+          x = x.split(' ')[0];
+          var tweetArray = streams.users[x];
+          for (var i = 0; i < tweetArray.length; i++) {
+            var $tweet = $(`<div class="${tweet.user} tweet" id="twitt"></div>`);
+            $tweet.text('@' + tweetArray[i].user + ': ' + tweetArray[i].message + ' : ' + tweetArray[i].created_at);
+            $tweet.appendTo($selectBody);
+          }
+        
+
+          // var selectIndexUpdate = streams.users[x].length;
+          // function selectGetUpdates() {
+          //   var numNewTweets = streams.users[x].length - selectIndexUpdate;
+          //   if (numNewTweets > 0) {
+          //     for (var i = 0; i < numNewTweets; i++) {
+          //       tweet = streams.home[selectIndexUpdate + i - 1]
+          //       $tweet = $(`<div class="${tweet.user} tweet" id="twitt"></div>`);
+          //       $tweet.text('@' + tweetArray[i].user + ': ' + tweetArray[i].message + ' : ' + tweetArray[i].created_at);
+          //       $tweet.appendTo($selectBody);
+          //       selectIndexUpdate = selectIndexUpdate + numNewTweets;
+          //     }
+          //   }
+          // }
+
+        
+          
+          setInterval(function(){selectGetUpdates()}, 1000);
+        });
+
+
+         
+        
+
+        
+
+        setInterval(function(){getUpdates()}, 1000);
+        
+
+        
 
       });
+
+
 
     </script>
   </body>
